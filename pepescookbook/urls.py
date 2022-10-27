@@ -17,19 +17,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework.urlpatterns import format_suffix_patterns
+from rest_framework.routers import DefaultRouter
 from api import views
 
+router = DefaultRouter()
+router.register(r'recipes', views.RecipeViewSet, basename='recipe')
+router.register(r'users', views.UserViewSet, basename='user')
+
 urlpatterns = [
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('users/', views.UserList.as_view()),
-    path('users/<int:pk>/', views.UserDetail.as_view()),
-    path('recipes/', views.RecipeList.as_view()),
-    path('recipes/<int:pk>/', views.RecipeDetail.as_view()),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
-
-urlpatterns += [
-    path('api-auth/', include('rest_framework.urls')),
-]
+# urlpatterns = format_suffix_patterns(urlpatterns)
+#
+# urlpatterns += [
+#     path('api-auth/', include('rest_framework.urls')),
+# ]
+# path('users/', views.UserList.as_view(), name='user-list'),
+# path('users/<int:pk>/', views.UserDetail.as_view()),
+# path('recipes/', views.RecipeList.as_view(), name='recipe-list'),
+# path('recipes/<int:pk>/', views.RecipeDetail.as_view()),
